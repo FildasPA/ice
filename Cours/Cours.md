@@ -40,3 +40,46 @@ Sécurité:
 - architecture côté serveur
 
 
+
+Serveur:
+1 ou pls servants (qui offrent des fonctionnalités)
+
+locator: lien proxy-servant (routage)
+
+requête: proxy créer un objet
+serveur: créer un servant qui répond à la requête avant de le détruire
+
+
+Adapteur: attaché à un communicateur
+interface serveur/bus de communication
+
+---
+
+Application serveur 1
+
+- Servant 1 --> Adaptateur --> Communicateur
+- Servant 2 --> 
+
+Application serveur 2
+
+- Servant 3 --> Adaptateur --> Communicateur
+- Servant 4 --> 
+
+---
+
+## Grid
+
+Facturer du temps de calcul aux utilisateurs.
+Machines mutualisées
+
+Machines != ; systèmes != ; ...
+-> service en continu
+
+---
+
+## Storm
+
+Service de messagerie de ice
+
+- attente de message venant du client/serveur
+- plusieurs serveurs de messagerie
