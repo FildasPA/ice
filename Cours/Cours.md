@@ -1,30 +1,69 @@
 # Middleware
 
 - architecture client/serveur
-- hétérogénéité: env de dev & de l'exécution
+- hétérogénéité: env de dev & d'exécution
+
+## Interopérabilité
+
+Capacité que possède un produit ou un système, dont les interfaces sont intégralement connues, à fonctionner avec d’autres produits ou systèmes existants ou futurs et ce sans restriction d’accès ou de mise en œuvre.
+
+Il convient de distinguer __interopérabilité__ et __compatibilité__. On peut dire qu’il y a __compatibilité__ quand deux produits, systèmes ou organisation peuvent fonctionner ensemble et __interopérabilité__ quand chacun peut savoir pourquoi et comment. On ne peut donc parler d’interopérabilité d’un produit, d’un système ou d’une organisation que si on en connaît intégralement toutes ses interfaces, sans restriction d’accès ou de mise en œuvre.
+
+---
 
 -> env complet
 -> intégration de composants !=, dev & exécutés dans des env !=
 
-- __proxy__: image locale de l'objet distant
-- __squeleton__: intermédiaire entre le proxy & le serveur
-- __object adapter__: côté serveur. gestion des servants (fonctionnalités): activation à la demande, réveil, destruction après un certain moment... -> stratégie côté serveur
+---
+
+- __proxy__: image locale de l'objet distant (généré côté client)
+	- produit à partir des définitions slice
+	- inclut les fonctions de *marshalling*: sérialisation de structure de données complexes
+- __squeleton__: intermédiaire entre le proxy & le serveur (généré côté serveur)
+	- produit à partir des définitions slice
+	- inclut aussi les fonctions de *marshalling*
+- __object adapter__: côté serveur. 
+	- responsable de l'*activation*: lien entre une requête et l'objet qui s'en charge
+	- gestion des servants (fonctionnalités): activation à la demande, réveil, destruction après un certain moment... -> stratégie côté serveur. 
+	- Génère les références (les proxy).
 
 Langage de spécification: description de fonctionnalités à l'aide d'un formalisme, pas directement un langage de programmation.
 
-## Asynchronous Method Invocation (AMI)
-
-ne bloque pas le thread appelant
-- oneway: aller simple vers le serveur
-- twoway: aller retour
+---
 
 Standardisation (par 1 seul industriel)
 
-objet structuré donnant des infos sur l'état d'avancement de la requête
-Appel / retour:
+---
+
+## Asynchronous Method Invocation (AMI)
+
+Ne bloque pas le thread appelant
+(Le serveur ne connait pas le mode d'invocation)
+
+- oneway: aller simple vers le serveur
+- twoway: aller retour (par défaut)
+
+Objet structuré donnant des infos sur l'état d'avancement de la requête et les acteurs
+Dissocie appel / retour
 - begin(): méthode non bloquante
 - end(): méthode de resynchronisation -> bloquante
 
+(impossible en CORBA)
+
+Ex:
+
+begin_prepareTruc(); // appel non bloquant
+...
+end_getTruc(); // appel bloquant
+
+---
+
+Côté proxy: classe *AsyncResultPtr*
+
+Encapsule les informations liées au processus asynchrone
++ Gestion d'une collection de requêtes en cours
+
+Les requêtes sont empilées dans un buffer en attendant le transport... ces méthodes informent sur le dépilement de la requête
 
 adapter->add(object, ic->stringToIdentity("Serveur")); // étiquette l'objet
 
@@ -40,6 +79,37 @@ Sécurité:
 - architecture côté serveur
 
 
+---
+
+## Threads
+
+Par défaut Ice: multithread (couche d'abstraction spécifique)
+
+__Thread:__ processus léger hébergé dans un processus lourd. Il possède:
+- pile d'exécution
+- identifiant de thread
+- pointeur d'instructions
+
+Les threads issus d'un même processus partagent:
+- code
+- mémoire
+- droits (unix)
+- environnement (shell, répertoire de travail)
+
+__Multithreading en Ice (package IceUtil):__
+- gestion de la concurrence d'accès
+- gestion des threads (création, suppression, contrôle, ...)
+
+__Concurrence d'accès:__
+- 1 thread par invocation
+- problème: accès concurrent à une ressource critique:
+	- drapeaux de verrouillage des sections critiques
+	- mutex, remutex: exclusion mutuelle, récursive
+	- Monitor, Gond: exclusions conditionnelles
+
+
+
+---
 
 Serveur:
 1 ou pls servants (qui offrent des fonctionnalités)
