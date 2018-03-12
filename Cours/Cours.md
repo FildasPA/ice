@@ -24,7 +24,7 @@ Il convient de distinguer __interopérabilité__ et __compatibilité__. On peut 
 	- inclut aussi les fonctions de *marshalling*
 - __object adapter__: côté serveur. 
 	- responsable de l'*activation*: lien entre une requête et l'objet qui s'en charge
-	- gestion des servants (fonctionnalités): activation à la demande, réveil, destruction après un certain moment... -> stratégie côté serveur. 
+	- gestion des servants (Active Servant Map [ASM]) (fonctionnalités): activation à la demande, réveil, destruction après un certain moment... -> stratégie côté serveur. 
 	- Génère les références (les proxy).
 
 Langage de spécification: description de fonctionnalités à l'aide d'un formalisme, pas directement un langage de programmation.
@@ -107,6 +107,10 @@ __Concurrence d'accès:__
 	- mutex, remutex: exclusion mutuelle, récursive
 	- Monitor, Gond: exclusions conditionnelles
 
+__Thread Pools:__
+__communicator:__ gestionnaire de canaux de communication (côté serveur ET client)
+Gère 2 paquets de threads: client & server thread pool
+Tous les adaptateurs d'un même communicator partagent ces pools
 
 
 ---
@@ -144,6 +148,17 @@ Machines mutualisées
 
 Machines != ; systèmes != ; ...
 -> service en continu
+
+Calcul parallèle
+exploitation de ressources de calcul
+
+- découverte de nouvelles ressources
+- découplage client/serveur
+- équilibrage de charge
+- réplciation de serveurs
+- stratégies d'activation
+- outils d'administration
+
 
 ---
 
