@@ -13,7 +13,6 @@ module Vocal
 	interface Coll
 	{
 		void add(Track t);
-		void remove(Track t);
 		Collection search(Track t);
 		Track getTrack(Track t);
 	};

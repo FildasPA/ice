@@ -13,9 +13,6 @@ class CollI(Vocal.Coll):
         print "Add track: " + track.title
         self.collection.append(track)
 
-    def remove(self, track, current=None):
-        print "Remove track"
-
     def search(self, track, current=None):
         print "Search track"
         c = []
