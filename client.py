@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+#-*- coding: utf-8 -*-
+
 import sys, traceback, Ice
 import vlc
 import time
@@ -15,12 +18,21 @@ try:
 
     track = Vocal.Track()
 
-    track.author = "auteur"
-    track.title = "titre"
-    track.filepath = "filepath"
-    track.duration = 0
+    track.author = "Muse"
+    track.title = "Undisclosed Desires"
+    track.filepath = "/home/etudiants/inf/uapv1502198/s2/muse.mp3"
+    track.duration = 236
 
     coll.add(track)
+
+    track2 = Vocal.Track()
+
+    track.author = "us"
+
+    c = coll.search(track2)
+
+    for t in c:
+        print "- " + t.title
 
 except:
     traceback.print_exc()

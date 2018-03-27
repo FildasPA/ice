@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+#-*- coding: utf-8 -*-
+
 import sys, traceback, Ice
 import Vocal
 
@@ -15,6 +18,13 @@ class CollI(Vocal.Coll):
 
     def search(self, track, current=None):
         print "Search track"
+        c = []
+
+        for t in self.collection:
+            if (track.author in t.author) or (track.title in t.title):
+                c.append(t)
+
+        return c
 
     def getTrack(self, track, current=None):
         print "Get track"
