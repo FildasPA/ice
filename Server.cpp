@@ -7,25 +7,23 @@ using namespace TP;
 class CollI : public Coll
 {
 private:
-	//TP::Collection collection;
-	//virtual void addTrack(const TP::Track& t);
-	//virtual void addTracks();
-public:
-	//virtual void add(const TP::Track& t, const Ice::Current&);
-	//virtual void remove(const TP::Track& t, const Ice::Current&);
-	//virtual TP::Collection search(const TP::Track& t, const Ice::Current&);
-	//virtual TP::Collection searchForTrackByAuthor(const string& s, const Ice::Current&);
-	//virtual TP::Collection searchForTrackByTitle(const string& s, const Ice::Current&);
 
-	virtual TP::Track getTrack(const Ice::Current&);
+public:
+	TP::Collection collection;
+	virtual void add(const TP::Track& t, const Ice::Current&);
+	virtual void remove(const TP::Track& t, const Ice::Current&);
+	virtual TP::Collection search(const TP::Track& t, const Ice::Current&);
+	virtual TP::Collection searchForTrackByAuthor(const string& s, const Ice::Current&);
+	virtual TP::Collection searchForTrackByTitle(const string& s, const Ice::Current&);
+	virtual TP::Track getTrack(const TP::Track& t, const Ice::Current&);
 };
 
-/*void
+void
 CollI::
-add(const TP::Track* t, const Ice::Current&)
+add(const TP::Track& t, const Ice::Current&)
 {
 	std::cout << "Add track: " << t.author << " - " << t.title << std::endl;
-	addTrack(t);
+	collection.push_back(t);
 }
 
 void
@@ -90,41 +88,21 @@ searchForTrackByTitle(const string& s, const Ice::Current&)
 	}
 
 	return c;
-}*/
-
-TP::Track CollI::getTrack(const Ice::Current&)
-{
-	TP::Track t1;
-	t1.author = "Muse";
-	t1.title = "Undisclosed Desires";
-	t1.filePath = "/home/etudiants/inf/uapv1502198/s2/muse.mp3";
-	t1.length = 236;
-	return t1;
 }
 
-//-----------------------------------------------------------------------------
-// * Add track
-//-----------------------------------------------------------------------------
-//void CollI::addTrack(const TP::Track& t)
-//{
-//	CollI::collection.push_back(t);
+TP::Track CollI::getTrack(const Track& t, const Ice::Current& i) {
+	TP::Collection c = search(t, i);
+	return c[0];
+}
+
+//void addTracks(CollI& c) {
+//	TP::Track t1;
+//	t1.author = "Muse";
+//	t1.title = "Undisclosed Desires";
+//	t1.filePath = "/home/etudiants/inf/uapv1502198/s2/muse.mp3";
+//	t1.duration = 236;
+//	c.collection.push_back(t1);
 //}
-
-//-----------------------------------------------------------------------------
-// * Add tracks
-//-----------------------------------------------------------------------------
-//void CollI::addTracks()
-//{
-//	Track* t1 = new Track();
-//	t1->author = "Muse";
-//	t1->title = "Undisclosed Desires";
-//	t1->filePath = "/home/etudiants/inf/uapv1502198/s2/muse.mp3";
-//	t1->duration = 236;
-//	addTrack(t1);
-//}
-
-
-
 
 int
 main(int argc, char* argv[])
@@ -139,9 +117,17 @@ main(int argc, char* argv[])
 		Ice::ObjectPtr object = new CollI;
 		adapter->add(object, ic->stringToIdentity("SimplePrinter"));
 
-		//addTracks();
+		// TP::Track t1;
+		// t1.author = "Muse";
+		// t1.title = "Undisclosed Desires";
+		// t1.filePath = "/home/etudiants/inf/uapv1502198/s2/muse.mp3";
+		// t1.duration = 236;
+		// CollI::collection.push_back(t1);
 
 		adapter->activate();
+
+		addTracks((CollI) object);
+
 		ic->waitForShutdown();
 	} catch (const Ice::Exception& e) {
 		cerr << e << endl;
