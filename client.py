@@ -6,6 +6,9 @@ import vlc
 import time
 import Vocal
 
+def playTrack():
+    print i
+
 
 status = 0
 ic = None
@@ -26,11 +29,11 @@ try:
     coll.add(track)
 
     track2 = Vocal.Track()
-
     track.author = "us"
 
     c = coll.search(track2)
 
+    print "Collection:"
     for t in c:
         print "- " + t.title
 
@@ -52,7 +55,7 @@ sys.exit(status)
 
 
 
-#track = server.getTrack();
+#track = server.getTrack()
 #instance = vlc.Instance()
 #player = instance.media_player_new()
 #media = instance.media_new(track.filePath)
