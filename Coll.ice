@@ -14,6 +14,6 @@ module Vocal
 	{
 		void add(Track t);
 		Collection search(Track t);
-		Track getTrack(Track t);
+		Track streamTrack(Track t);
 	};
 };

@@ -17,4 +17,11 @@ media = instance.media_new(filepath, options)
 player.set_media(media)
 player.play()
 
-time.sleep(236)
+time.sleep(5)
+
+print(media)
+player.set_media(None)
+media = None
+print(media)
+
+#time.sleep(236)
