@@ -31,6 +31,14 @@ compile_server:
 	python server.py
 
 #-=-=-=-=-=-=-=-=
+# PYTHON ADMIN
+#-=-=-=-=-=-=-=-=
+
+admin:
+	@slice2py Coll.ice
+	python admin.py
+
+#-=-=-=-=-=-=-=-=
 # PYTHON CLIENT
 #-=-=-=-=-=-=-=-=
 
