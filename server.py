@@ -13,10 +13,10 @@ class CollI(Vocal.Coll):
 
     def __init__(self):
         self.collection = []
-        self.instance = vlc.Instance()
-        self.player = instance.media_player_new()
-        self.media = None
-        self.port = 8080
+        #self.instance = vlc.Instance()
+        #self.player = instance.media_player_new()
+        #self.media = None
+        #self.port = 8080
 
     def add(self, track, current=None):
         print "Add track: " + track.title
@@ -32,15 +32,15 @@ class CollI(Vocal.Coll):
 
         return c
 
-    def streamTrack(self, track, current=None):
-        if self.media not None:
-            self.player.set_media(None)
-            self.media = None
-
-        options = ':sout=#transcode{vcodec=none,acodec=mp3,ab=128,channels=2,samplerate=44100}:http{mux=mp3,dst=:%s/}' %(str(self.port))
-        self.media = instance.media_new(track.filepath, options)
-        self.player.set_media(media)
-        self.player.play()
+    #def streamTrack(self, track, current=None):
+    #    if self.media not None:
+    #        self.player.set_media(None)
+    #        self.media = None
+#
+    #    options = '#:sout=#transcode{vcodec=none,acodec=mp3,ab=128,channels=2,samplerate=44100}:http{mux=mp3,dst=:%s#/}' %(str(self.port))
+    #    self.media = instance.media_new(track.filepath, options)
+    #    self.player.set_media(media)
+    #    self.player.play()
 
 status = 0
 ic = None
