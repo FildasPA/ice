@@ -20,11 +20,11 @@ class CollI(Vocal.Coll):
         self.port = 8080
 
     def add(self, track, current=None):
-        print "Add track: " + track.title
+        print("Add track: " + track.title)
         self.collection.append(track)
 
     def search(self, track, current=None):
-        print "Search track"
+        print("Search track")
         c = []
 
         for t in self.collection:
@@ -34,7 +34,7 @@ class CollI(Vocal.Coll):
         return c
 
     def startStream(self, track, current=None):
-        if self.media not None:
+        if self.media != None:
             self.player.stop()
             self.player.set_media(None)
             self.media = None
@@ -48,15 +48,15 @@ class CollI(Vocal.Coll):
         return dst
 
     def pauseStream(self, current=None):
-        if self.media not None:
+        if self.media != None:
             self.player.pause()
 
     def resumeStream(self, current=None):
-        if self.media not None:
+        if self.media != None:
             self.player.pause()
 
     def stopStream(self, current=None):
-        if self.media not None:
+        if self.media != None:
             self.player.stop()
             self.player.set_media(None)
             self.media = None
