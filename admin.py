@@ -51,15 +51,17 @@ with Ice.initialize(sys.argv) as communicator:
         print("Several tracks found")
     else:
         print("Streaming on %s" %(result))
-        time.sleep(30)
-        print("Pause stream please!")
-        proxy.pauseStream()
-        time.sleep(10)
-        print("Resume stream please!")
-        proxy.resumeStream()
-        time.sleep(30)
-        print("Stop stream please!")
-        proxy.stopStream()
+        time.sleep(600)
+        print("Stop!!")
+        # time.sleep(30)
+        # print("Pause stream please!")
+        # proxy.pauseStream()
+        # time.sleep(10)
+        # print("Resume stream please!")
+        # proxy.resumeStream()
+        # time.sleep(30)
+        # print("Stop stream please!")
+        # proxy.stopStream()
 
 #status = 0
 #ic = None
