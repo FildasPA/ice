@@ -14,7 +14,7 @@ module Vocal
 	{
 		void add(Track t);
 		Collection search(Track t);
-		String startStream(Track t);
+		string startStream(Track t);
 		void pauseStream();
 		void resumeStream();
 		void stopStream();

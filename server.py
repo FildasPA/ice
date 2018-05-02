@@ -14,10 +14,11 @@ class CollI(Vocal.Coll):
     def __init__(self):
         self.collection = []
         self.instance = vlc.Instance()
-        self.player = instance.media_player_new()
+        self.player = self.instance.media_player_new()
         self.media = None
         self.ip = socket.gethostbyname(socket.gethostname())
         self.port = 8080
+        print("Initialized!")
 
     def add(self, track, current=None):
         print("Add track: " + track.title)
@@ -61,25 +62,33 @@ class CollI(Vocal.Coll):
             self.player.set_media(None)
             self.media = None
 
-status = 0
-ic = None
-try:
-    ic = Ice.initialize(sys.argv)
-    adapter = ic.createObjectAdapterWithEndpoints("CollAdapter", "default -p 10000")
+
+with Ice.initialize(sys.argv) as communicator:
+    adapter = communicator.createObjectAdapterWithEndpoints("SimplePrinterAdapter", "default -p 10000")
     object = CollI()
-    adapter.add(object, ic.stringToIdentity("Coll"))
+    adapter.add(object, communicator.stringToIdentity("SimplePrinter"))
     adapter.activate()
-    ic.waitForShutdown()
-except:
-    traceback.print_exc()
-    status = 1
+    communicator.waitForShutdown()
 
-if ic:
-    # Clean up
-    try:
-        ic.destroy()
-    except:
-        traceback.print_exc()
-        status = 1
-
-sys.exit(status)
+#status = 0
+#ic = None
+#try:
+#    ic = Ice.initialize(sys.argv)
+#    adapter = ic.createObjectAdapterWithEndpoints("CollAdapter", "default -p 10000")
+#    object = CollI()
+#    adapter.add(object, ic.stringToIdentity("Coll"))
+#    adapter.activate()
+#    ic.waitForShutdown()
+#except:
+#    traceback.print_exc()
+#    status = 1
+#
+#if ic:
+#    # Clean up
+#    try:
+#        ic.destroy()
+#    except:
+#        traceback.print_exc()
+#        status = 1
+#
+#sys.exit(status)
