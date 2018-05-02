@@ -7,6 +7,9 @@ import socket
 import time
 import Vocal
 
+ip = socket.gethostbyname(socket.gethostname())
+port = 5005
+
 class Player:
     def __init__(self):
         self.instance = vlc.Instance()
@@ -16,7 +19,6 @@ class Player:
 
     def start(self, filepath, duration, ip, port):
         self.stop()
-
         options = ':sout=#transcode{vcodec=none,acodec=mp3,ab=128,channels=2,samplerate=44100}:http{mux=mp3,dst=:%s/}' %(str(port))
         self.media = self.instance.media_new(filepath, options)
         self.player.set_media(self.media)
@@ -122,7 +124,9 @@ class CollI(Vocal.Coll):
 
 
 with Ice.initialize(sys.argv) as communicator:
-    adapter = communicator.createObjectAdapterWithEndpoints("SimplePrinterAdapter", "default -p 10000")
+    address = "tcp -h %s -p %s" %(ip, port)
+    print("IceServer address: %s" %(address))
+    adapter = communicator.createObjectAdapterWithEndpoints("SimplePrinterAdapter", address)
     object = CollI()
     adapter.add(object, communicator.stringToIdentity("SimplePrinter"))
     adapter.activate()
