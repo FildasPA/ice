@@ -7,17 +7,43 @@ import socket
 import time
 import Vocal
 
-filepath = '/home/etudiants/inf/uapv1502198/s2/muse.mp3'
+class Player:
+    def __init__(self):
+        self.instance = vlc.Instance()
+        self.player = self.instance.media_player_new()
+        self.media = None
+        print("Initialized player!")
+
+    def start(self, filepath, duration, ip, port):
+        self.stop()
+
+        options = ':sout=#transcode{vcodec=none,acodec=mp3,ab=128,channels=2,samplerate=44100}:http{mux=mp3,dst=:%s/}' %(str(port))
+        self.media = self.instance.media_new(filepath, options)
+        self.player.set_media(self.media)
+        self.player.play()
+
+    def pause(self):
+        if self.media != None:
+            self.player.pause()
+
+    def resume(self):
+        if self.media != None:
+            self.player.pause()
+
+    def stop(self):
+        if self.media != None:
+            self.player.stop()
+            self.player.set_media(None)
+            self.media = None
+
 
 class CollI(Vocal.Coll):
 
     def __init__(self):
         self.collection = []
-        self.instance = vlc.Instance()
-        self.player = self.instance.media_player_new()
-        self.media = None
+        self.player = Player()
         self.ip = socket.gethostbyname(socket.gethostname())
-        self.port = 8080
+        self.port = 8181
         print("Initialized!")
 
     def add(self, track, current=None):
@@ -27,40 +53,43 @@ class CollI(Vocal.Coll):
     def search(self, track, current=None):
         print("Search track")
         c = []
-
         for t in self.collection:
-            if (track.author in t.author) or (track.title in t.title):
+            if (track.author and track.author in t.author) or (track.title and track.title in t.title):
                 c.append(t)
-
         return c
 
+    # Get a track object with possibly incomplete informations
+    # Search for track(s) in the server collection
+    # If no track was found, it returns "none"
+    # If exactly one track is found, it returns a stream address
+    # If several tracks are found, it returns "several"
+    def searchTrackAndStream(self, track, current=None):
+        c = self.search(track)
+        print(str(c))
+        if not c:
+            return ""
+        elif len(c) == 1:
+            self.startStream(c[0])
+        else:
+            return "several"
+
     def startStream(self, track, current=None):
-        if self.media != None:
-            self.player.stop()
-            self.player.set_media(None)
-            self.media = None
-
-        dst = str(ip)+":"+str(port)
-        options = '#:sout=#transcode{vcodec=none,acodec=mp3,ab=128,channels=2,samplerate=44100}:http{mux=mp3,dst=:%s#/}' %(str(self.port))
-        self.media = instance.media_new(track.filepath, options)
-        self.player.set_media(media)
-        self.player.play()
-
+        dst = str(self.ip)+":"+str(self.port)
+        self.player.start(track.filepath, track.duration, self.ip, self.port)
+        print("streaming %s on %s" %(track.filepath, dst))
         return dst
 
     def pauseStream(self, current=None):
-        if self.media != None:
-            self.player.pause()
+        print("Pause Stream!")
+        self.player.pause()
 
     def resumeStream(self, current=None):
-        if self.media != None:
-            self.player.pause()
+        print("Resume Stream!")
+        self.player.resume()
 
     def stopStream(self, current=None):
-        if self.media != None:
-            self.player.stop()
-            self.player.set_media(None)
-            self.media = None
+        print("Stop Stream!")
+        self.player.stop()
 
 
 with Ice.initialize(sys.argv) as communicator:
