@@ -44,17 +44,29 @@ class CollI(Vocal.Coll):
         self.player = Player()
         self.ip = socket.gethostbyname(socket.gethostname())
         self.port = 8181
+        self.addTracks()
         print("Initialized!")
 
     def add(self, track, current=None):
         print("Add track: " + track.title)
         self.collection.append(track)
 
+    def addTrack(self, author, title, filepath, duration):
+        track = Vocal.Track()
+
+        track.author = author
+        track.title = title
+        track.filepath = filepath
+        track.duration = int(duration)
+
+        self.add(track)
+
     def search(self, track, current=None):
         print("Search track")
         c = []
         for t in self.collection:
-            if (track.author and track.author in t.author) or (track.title and track.title in t.title):
+            if (track.author and track.author.lower() in t.author.lower()) \
+                or (track.title and track.title.lower() in t.title.lower()):
                 c.append(t)
         return c
 
@@ -67,16 +79,19 @@ class CollI(Vocal.Coll):
         c = self.search(track)
         print(str(c))
         if not c:
-            return ""
+            print("No track found...")
+            return "none"
         elif len(c) == 1:
-            self.startStream(c[0])
+            print("Streaming!")
+            return self.startStream(c[0])
         else:
+            print("Several tracks found")
             return "several"
 
     def startStream(self, track, current=None):
         dst = str(self.ip)+":"+str(self.port)
         self.player.start(track.filepath, track.duration, self.ip, self.port)
-        print("streaming %s on %s" %(track.filepath, dst))
+        print("Streaming '%s' on %s" %(track.filepath, dst))
         return dst
 
     def pauseStream(self, current=None):
@@ -90,6 +105,20 @@ class CollI(Vocal.Coll):
     def stopStream(self, current=None):
         print("Stop Stream!")
         self.player.stop()
+
+    def addTracks(self):
+        self.addTrack("Muse",
+             "Undisclosed Desires",
+             "D:/Musique/num/86/Rock/Phrenia - Perspectives.mp3",
+             236)
+        self.addTrack("Marty Friedman, Jean-Ken Johnny, KenKen",
+             "The Perfect World",
+             "D:/Musique/num/88/Anime/Marty Friedman feat. Jean-Ken Johnny, KenKen _ The Perfect World.mp3",
+             236)
+        self.addTrack("Dragon Ball GT",
+             "Dragon Ball GT Opening",
+             "D:/Musique/num/88/Anime/Dragon Ball GT Opening.mp3",
+             236)
 
 
 with Ice.initialize(sys.argv) as communicator:
