@@ -4,13 +4,13 @@ from flask_restful import Resource, Api
 app = Flask(__name__)
 api = Api(app)
 
-allowed_vocal_commands = [
-    'jouer',
-    'chercher',
-    'pause',
-    'reprendre',
-    'stop',
-]
+valid_vocal_commands = {
+    'play':   ['jouer', 'play', 'lancer'],
+    'search': ['chercher', 'cherche', 'search'],
+    'pause':  ['pause'],
+    'resume': ['reprendre', 'reprend', 'resume'],
+    'stop':   ['arrêt', 'arrête', 'arrêter', 'stop'],
+}
 
 class Vocal(Resource):
     def get(self):
@@ -20,10 +20,14 @@ class Vocal(Resource):
         vocal = request.args.get('vocal')
         if vocal:
             vocal = vocal.split(' ')
-            if vocal[0] in allowed_vocal_commands:
-                command = vocal[0]
-                if vocal[0] in ['jouer', 'chercher']:
-                    params = ' '.join(x for x in vocal[1:])
+            # Search in which category ('play', 'search', 'pause', ...)
+            # the vocal command belongs to
+            for category, commands in valid_vocal_commands.items():
+                if vocal[0] in commands:
+                    command = category
+                    if category in ['play', 'search']:
+                        params = ' '.join(x for x in vocal[1:])
+                    break
 
         result = {'command': command, 'params': str(params)}
         return result
