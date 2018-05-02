@@ -62,7 +62,7 @@ class CollI(Vocal.Coll):
         self.add(track)
 
     def search(self, track, current=None):
-        print("Search track")
+        print("Search track: title: '%s', author: '%s'" %(track.title, track.author))
         c = []
         for t in self.collection:
             if (track.author and track.author.lower() in t.author.lower()) \
